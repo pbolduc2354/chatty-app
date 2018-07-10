@@ -3,10 +3,11 @@ import MessageList from './MessageList.jsx'
 import ChatBar from './ChatBar.jsx'
 
 
+
 class App extends Component {
   constructor(props) {
     super(props);
-
+    
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [
@@ -23,7 +24,7 @@ class App extends Component {
       ]
     };
   }
-
+  
   componentDidMount() {
     console.log("componentDidMount <App />");
     setTimeout(() => {
@@ -36,6 +37,17 @@ class App extends Component {
       this.setState({messages: messages})
     }, 3000);
   }
+  
+
+  
+  handleNewMessage = e => {
+    if(e.key == "Enter"){
+      let newMessage = {username: this.state.currentUser.name, content: e.target.value} 
+      const messages = this.state.messages.concat(newMessage)
+      this.setState({messages : messages})
+      e.target.value = "";
+    }
+  }
 
   render() {
     return (
@@ -44,7 +56,7 @@ class App extends Component {
         <a href="/" className="navbar-brand">Chatty</a>
       </nav>
       <MessageList messages={this.state.messages}/>
-      <ChatBar currentUser={this.state.currentUser.name}/>
+      <ChatBar handleNewMessage={this.handleNewMessage} currentUser={this.state.currentUser.name}/>
   </div>
     );
   }
