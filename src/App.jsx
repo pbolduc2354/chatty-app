@@ -9,24 +9,24 @@ class App extends Component {
     super(props);
     
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: [
-        {
-          id: 1,
-          username: "Bob",
-          content: "Has anyone seen my marbles?",
-        },
-        {
-          id: 2,
-          username: "Anonymous",
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-        }
-      ]
+      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      messages: []
     };
+    this.socket = new WebSocket("ws://localhost:3001/");
   }
   
   componentDidMount() {
     console.log("componentDidMount <App />");
+
+
+    this.socket.onopen = e => {
+      console.log('Connected to server');
+      // ws.send("Here's some text that the server is urgently awaiting!"); 
+    };
+
+    this.socket.addEventListener("message", this.receiveMessage);
+
+
     setTimeout(() => {
       console.log("Simulating incoming message");
       // Add a new message to the list of messages in the data store
@@ -37,17 +37,34 @@ class App extends Component {
       this.setState({messages: messages})
     }, 3000);
   }
-  
 
-  
+  changeUser = e => {
+    if(e.key == "Enter"){
+      if (e.target.value.length > 0){
+        console.log("holla")
+        const newUser = {name: e.target.value}
+        this.setState({currentUser: newUser })
+        e.target.value = "";
+      } else {
+      alert("Can't use an empty username")
+    } 
+    }
+  }
+
+  receiveMessage = e => {
+    const newMessage = JSON.parse(e.data);
+    const messages = this.state.messages.concat(newMessage)
+    this.setState({messages : messages})
+  }
+
   handleNewMessage = e => {
     if(e.key == "Enter"){
-      let newMessage = {username: this.state.currentUser.name, content: e.target.value} 
-      const messages = this.state.messages.concat(newMessage)
-      this.setState({messages : messages})
+      const newMessage = {type: 'message', username: this.state.currentUser.name, content: e.target.value} 
+      this.socket.send(JSON.stringify(newMessage));
       e.target.value = "";
     }
   }
+
 
   render() {
     return (
@@ -56,7 +73,7 @@ class App extends Component {
         <a href="/" className="navbar-brand">Chatty</a>
       </nav>
       <MessageList messages={this.state.messages}/>
-      <ChatBar handleNewMessage={this.handleNewMessage} currentUser={this.state.currentUser.name}/>
+      <ChatBar handleNewMessage={this.handleNewMessage} changeUser={this.changeUser} currentUser={this.state.currentUser.name}/>
   </div>
     );
   }
