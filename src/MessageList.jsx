@@ -9,11 +9,11 @@ class MessageList extends Component {
         const color = this.props.color
 
 // listOfMessage create an array for each message in the messages variable
+// listOfMessage use an if statement that use the type of the message to see if its a notification or a message.
+// Depending of the type listOfMessage will return different things and will be render with messageList
         const listOfMessage = messages.map((message) => {
         console.log(message.type);
 
-// This is an if statement that use the type of the message to see if its a notification or a message.
-// Depending of the type listOfMessage will return different things and will be render with messageList
 
         if(message.type === "incomingMessage"){
             return(

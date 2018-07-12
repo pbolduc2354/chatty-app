@@ -20,7 +20,6 @@ class App extends Component {
   componentDidMount() {
     console.log("componentDidMount <App />");
 
-
     this.socket.onopen = e => {
       console.log('Connected to server');
     };

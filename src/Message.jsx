@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 
 // Message is the component for every single message that are render in the messageList component.
-
-
 class Message extends Component {
     render() {
         return (

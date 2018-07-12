@@ -30,14 +30,14 @@ wss.broadcast = function broadcast(data) {
 
 // userOnline Create is the object that count the number of user that are online.
 // Every time a user connect the counter add 1 and every time a user disconnect the counter delete 1
-let userOnline ={
+const userOnline ={
   count: 0,
   type: "userOnline"
 } 
 
 
 
-let userColor = {
+const userColor = {
   color: "",
   type: "userColor"
 }
@@ -48,6 +48,7 @@ wss.on('connection', (ws) => {
   let color = randomColor();
 
   console.log('Client connected');
+
   userOnline.count ++;
   wss.broadcast(JSON.stringify(userOnline))
 
@@ -56,7 +57,7 @@ wss.on('connection', (ws) => {
 
 
 // this is the section that receive every message send by app.jsx. Depending of the type of the message, it will resend it a certain way
- 
+
     ws.on('message', (data) => {
         let msg = JSON.parse(data);
         
