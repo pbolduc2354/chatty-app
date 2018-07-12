@@ -4,13 +4,14 @@ import Message from './Message.jsx';
 class MessageList extends Component {
     render() {
         const messages = this.props.messages
+        const color = this.props.color
         const listOfMessage = messages.map((message) => {
         console.log(message.type);
 
         if(message.type === "incomingMessage"){
             return(
             <div key={message.id}>
-            < Message message={message} />
+            < Message color={color} message={message} />
             </div>
             )
         } else {

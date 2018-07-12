@@ -9,9 +9,10 @@ class App extends Component {
     super(props);
     
     this.state = {
-      currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Anonymous" }, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [],
-      countUserOnline: 0
+      countUserOnline: 0,
+      userColor: ""
     };
     this.socket = new WebSocket("ws://localhost:3001/");
   }
@@ -44,7 +45,7 @@ class App extends Component {
 
   receiveMessage = e => {
     const newMessage = JSON.parse(e.data);
-    console.log(newMessage)
+    // console.log(newMessage)
 
     switch(newMessage.type) {
       case "incomingMessage":
@@ -63,6 +64,14 @@ class App extends Component {
         const status = newMessage.count
         this.setState({countUserOnline: status})
         console.log(status)
+      break;
+
+      case "userColor":
+      this.setState({ userColor: newMessage.color })
+      console.log(this.state.userColor);
+         console.log(this.state)
+        // this.setState({countUserOnline: status})
+        // console.log(status)
       break;
     }
 
@@ -86,7 +95,7 @@ class App extends Component {
         <a href="/" className="navbar-brand">Chatty</a>
         <a className="countUserOnline">{this.state.countUserOnline} Users online</a>
       </nav>
-      <MessageList messages={this.state.messages}/>
+      <MessageList messages={this.state.messages} color={this.state.userColor}/>
       <ChatBar handleNewMessage={this.handleNewMessage} changeUser={this.changeUser} currentUser={this.state.currentUser.name}/>
   </div>
     );

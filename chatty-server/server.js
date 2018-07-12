@@ -3,6 +3,8 @@
 const express = require('express');
 const SocketServer = require('ws');
 const uuidv4 = require('uuid/v4');
+const randomColor = require('random-color');
+
 
 // Set the port to 3001
 const PORT = 3001;
@@ -23,18 +25,32 @@ wss.broadcast = function broadcast(data) {
     }
   });
 };
+
+
+
 let userOnline ={
   count: 0,
   type: "userOnline"
-} ;
+} 
+
+
+
+let userColor = {
+  color: "",
+  type: "userColor"
+}
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
+  let color = randomColor();
+
   console.log('Client connected');
   userOnline.count ++;
   wss.broadcast(JSON.stringify(userOnline))
-  console.log(userOnline);
+
+  userColor.color = randomColor().hexString();
+  wss.broadcast(JSON.stringify(userColor))
 
 
 // When a client send a message with the nav bar 
@@ -64,6 +80,5 @@ wss.on('connection', (ws) => {
     console.log('Client disconnected')
     userOnline.count --;
     wss.broadcast(JSON.stringify(userOnline))
-    console.log(userOnline)
   });
 });
