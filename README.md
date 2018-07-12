@@ -22,9 +22,18 @@ open http://localhost:3000
 
 ### Dependencies
 
-* React
-* Webpack
-* [babel-loader](https://github.com/babel/babel-loader)
-* [webpack-dev-server]
+*babel-core
+*babel-loader
+*babel-preset-es2015
+*babel-preset-react
+*css-loader
+*node-sass
+*sass-loader
+*sockjs-client
+*style-loader
+*webpack
+*webpack-dev-server
+*react
+*react-dom
 * Random-color
 (https://github.com/webpack/webpack-dev-server)
