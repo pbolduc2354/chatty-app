@@ -1,18 +1,15 @@
-React Boilerplate
+Chatty-app / React Project
 =====================
 
-A minimal and light dev environment for ReactJS.
+A chat project using React, Webpack and babel-loader. 
 
 ### Usage
 
-Clone the boilerplate and create your own git repo.
-
 ```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-cd react-simple-boilerplate
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
+Fork this repository, then clone your fork of this repository.
+Install dependencies using the npm install command.
+Start the web server using the npm run local command. The app will be served at http://localhost:3000/.
+Go to http://localhost:8080/ in your browser.
 ```
 
 Install the dependencies and start the server.
@@ -23,23 +20,11 @@ npm start
 open http://localhost:3000
 ```
 
-### Static Files
-
-You can store static files like images, fonts, etc in the `build` folder.
-
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
-
-### Linting
-
-This boilerplate project includes React ESLint configuration.
-
-```
-npm run lint
-```
-
 ### Dependencies
 
 * React
 * Webpack
 * [babel-loader](https://github.com/babel/babel-loader)
-* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+* [webpack-dev-server]
+* Random-color
+(https://github.com/webpack/webpack-dev-server)
