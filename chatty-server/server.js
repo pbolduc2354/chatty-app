@@ -18,6 +18,7 @@ const server = express()
 // Create the WebSockets server
 const wss = new SocketServer.Server({ server });
 
+// This is the function that we can call when we want to send data to the app.js page.
 wss.broadcast = function broadcast(data) {
   wss.clients.forEach(function each(client) {
     if (client.readyState === SocketServer.OPEN) {
@@ -27,7 +28,8 @@ wss.broadcast = function broadcast(data) {
 };
 
 
-
+// userOnline Create is the object that count the number of user that are online.
+// Every time a user connect the counter add 1 and every time a user disconnect the counter delete 1
 let userOnline ={
   count: 0,
   type: "userOnline"
@@ -53,7 +55,8 @@ wss.on('connection', (ws) => {
   wss.broadcast(JSON.stringify(userColor))
 
 
-// When a client send a message with the nav bar 
+// this is the section that receive every message send by app.jsx. Depending of the type of the message, it will resend it a certain way
+ 
     ws.on('message', (data) => {
         let msg = JSON.parse(data);
         

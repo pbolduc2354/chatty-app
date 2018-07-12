@@ -9,7 +9,7 @@ class App extends Component {
     super(props);
     
     this.state = {
-      currentUser: {name: "Anonymous" }, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: {name: "Anonymous" },
       messages: [],
       countUserOnline: 0,
       userColor: ""
@@ -23,12 +23,12 @@ class App extends Component {
 
     this.socket.onopen = e => {
       console.log('Connected to server');
-      // ws.send("Here's some text that the server is urgently awaiting!"); 
     };
 
     this.socket.addEventListener("message", this.receiveMessage);
   }
 
+  // When a user change is username with the username input this method send the data to the server and the server send it back to receiveMessage
   changeUser = e => {
     if(e.key == "Enter"){
       if (e.target.value.length > 0){
@@ -43,6 +43,7 @@ class App extends Component {
     }
   }
 
+  // receiveMessage receive the data send from the server and make sure that the data is well use depending of its type
   receiveMessage = e => {
     const newMessage = JSON.parse(e.data);
     // console.log(newMessage)
@@ -70,15 +71,13 @@ class App extends Component {
       this.setState({ userColor: newMessage.color })
       console.log(this.state.userColor);
          console.log(this.state)
-        // this.setState({countUserOnline: status})
-        // console.log(status)
       break;
     }
 
 
 
   }
-
+// handleNewMessage is use when a user send a message with the message input. It send the data to the server.
   handleNewMessage = e => {
     if(e.key == "Enter"){
       const newMessage = {type: 'postMessage', username: this.state.currentUser.name, content: e.target.value} 
@@ -87,6 +86,7 @@ class App extends Component {
     }
   }
 
+// render is the structure of the html and combines all the component.
 
   render() {
     return (

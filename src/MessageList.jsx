@@ -1,12 +1,19 @@
 import React, {Component} from 'react';
 import Message from './Message.jsx';
 
+// Message list is the component that render all the chat messages and notifications
+
 class MessageList extends Component {
     render() {
         const messages = this.props.messages
         const color = this.props.color
+
+// listOfMessage create an array for each message in the messages variable
         const listOfMessage = messages.map((message) => {
         console.log(message.type);
+
+// This is an if statement that use the type of the message to see if its a notification or a message.
+// Depending of the type listOfMessage will return different things and will be render with messageList
 
         if(message.type === "incomingMessage"){
             return(
@@ -24,6 +31,7 @@ class MessageList extends Component {
             )
         }  
     })
+    // this is the message list return that takes listOfMessage
         return (
             <main className="messages">
             {listOfMessage}

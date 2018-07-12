@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 
+// ChatBar is the component the create the navbar and display the number of user online. 
 class ChatBar extends Component {
   render() {
 
