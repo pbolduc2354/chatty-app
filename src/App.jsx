@@ -10,7 +10,8 @@ class App extends Component {
     
     this.state = {
       currentUser: {name: "Anonymous"}, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: []
+      messages: [],
+      countUserOnline: 0
     };
     this.socket = new WebSocket("ws://localhost:3001/");
   }
@@ -25,41 +26,53 @@ class App extends Component {
     };
 
     this.socket.addEventListener("message", this.receiveMessage);
-
-
-    setTimeout(() => {
-      console.log("Simulating incoming message");
-      // Add a new message to the list of messages in the data store
-      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-      const messages = this.state.messages.concat(newMessage)
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({messages: messages})
-    }, 3000);
   }
 
   changeUser = e => {
     if(e.key == "Enter"){
       if (e.target.value.length > 0){
-        console.log("holla")
-        const newUser = {name: e.target.value}
-        this.setState({currentUser: newUser })
+        const newUser = {type: "postNotification", name: e.target.value};
+        newUser.content = `${this.state.currentUser.name} has changed their name to ${newUser.name}`;
+        this.socket.send(JSON.stringify(newUser));
+        this.setState({currentUser: newUser});
         e.target.value = "";
       } else {
-      alert("Can't use an empty username")
+      alert("Can't use an empty username");
     } 
     }
   }
 
   receiveMessage = e => {
     const newMessage = JSON.parse(e.data);
-    const messages = this.state.messages.concat(newMessage)
-    this.setState({messages : messages})
+    console.log(newMessage)
+
+    switch(newMessage.type) {
+      case "incomingMessage":
+        const messages = this.state.messages.concat(newMessage);
+        this.setState({messages : messages});
+      break;
+
+      case "incomingNotification":
+        const newUser = newMessage
+        console.log(newUser.content);
+        const othermessage = this.state.messages.concat(newUser);
+        this.setState({ messages: othermessage })
+      break;
+
+      case "userOnline":
+        const status = newMessage.count
+        this.setState({countUserOnline: status})
+        console.log(status)
+      break;
+    }
+
+
+
   }
 
   handleNewMessage = e => {
     if(e.key == "Enter"){
-      const newMessage = {type: 'message', username: this.state.currentUser.name, content: e.target.value} 
+      const newMessage = {type: 'postMessage', username: this.state.currentUser.name, content: e.target.value} 
       this.socket.send(JSON.stringify(newMessage));
       e.target.value = "";
     }
@@ -71,6 +84,7 @@ class App extends Component {
     <div>
       <nav className="navbar">
         <a href="/" className="navbar-brand">Chatty</a>
+        <a className="countUserOnline">{this.state.countUserOnline} Users online</a>
       </nav>
       <MessageList messages={this.state.messages}/>
       <ChatBar handleNewMessage={this.handleNewMessage} changeUser={this.changeUser} currentUser={this.state.currentUser.name}/>
